@@ -1,0 +1,217 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Watch-list Configuration
+# Each entry defines how a YOLO class should be treated by the alert engine.
+#
+# Fields:
+#   class:       YOLO class name (must match model's names list)
+#   label:       Human-readable label shown in the UI
+#   source:      "coco" or "custom" (custom = needs custom model weights)
+#   tier:        low | medium | high | critical
+#   confidence:  Minimum detection confidence (0-1)
+#   consecutive_seconds: How many seconds the detection must persist before an event fires
+#   cooldown_seconds: Minimum gap between two events of the same type on the same camera
+#   enabled:     Whether this class is active
+#   notes:       UI tooltip / description
+# ─────────────────────────────────────────────────────────────────────────────
+
+classes:
+  # ── COCO classes (available with default yolov8n.pt) ──────────────────────
+
+  - class: knife
+    label: "Sharp Object (Knife)"
+    source: coco
+    tier: high
+    confidence: 0.55
+    consecutive_seconds: 2
+    cooldown_seconds: 60
+    enabled: true
+    notes: "Detected as 'knife' by COCO model. Verify visually before acting."
+
+  - class: scissors
+    label: "Sharp Object (Scissors)"
+    source: coco
+    tier: medium
+    confidence: 0.50
+    consecutive_seconds: 3
+    cooldown_seconds: 90
+    enabled: true
+    notes: "Context-dependent. Could be office use."
+
+  - class: baseball bat
+    label: "Potential Blunt Weapon (Baseball Bat)"
+    source: coco
+    tier: medium
+    confidence: 0.55
+    consecutive_seconds: 2
+    cooldown_seconds: 60
+    enabled: true
+    notes: "Context-dependent. Sporting use is common."
+
+  - class: backpack
+    label: "Unattended Bag (Backpack)"
+    source: coco
+    tier: medium
+    confidence: 0.50
+    consecutive_seconds: 30   # triggers unattended-bag rule
+    cooldown_seconds: 120
+    enabled: true
+    notes: "Triggers unattended-item rule when no person nearby."
+
+  - class: handbag
+    label: "Unattended Bag (Handbag)"
+    source: coco
+    tier: medium
+    confidence: 0.50
+    consecutive_seconds: 30
+    cooldown_seconds: 120
+    enabled: true
+    notes: "Triggers unattended-item rule when no person nearby."
+
+  - class: suitcase
+    label: "Unattended Luggage (Suitcase)"
+    source: coco
+    tier: high
+    confidence: 0.50
+    consecutive_seconds: 20
+    cooldown_seconds: 120
+    enabled: true
+    notes: "High concern when left unattended in public areas."
+
+  - class: bottle
+    label: "Bottle"
+    source: coco
+    tier: low
+    confidence: 0.45
+    consecutive_seconds: 5
+    cooldown_seconds: 120
+    enabled: false
+    notes: "Only meaningful with zone rules. Disabled by default."
+
+  - class: person
+    label: "Person"
+    source: coco
+    tier: low
+    confidence: 0.40
+    consecutive_seconds: 1
+    cooldown_seconds: 10
+    enabled: true
+    notes: "Used for counting, zone rules, and density detection."
+
+  # ── Custom model classes (hooks only — loads from CUSTOM_MODEL_PATH) ───────
+
+  - class: firearm
+    label: "Possible Firearm"
+    source: custom
+    tier: critical
+    confidence: 0.70
+    consecutive_seconds: 1
+    cooldown_seconds: 30
+    enabled: true
+    notes: "Requires custom-trained model. Evidence image mandatory."
+
+  - class: fire
+    label: "Fire / Flame"
+    source: custom
+    tier: critical
+    confidence: 0.60
+    consecutive_seconds: 2
+    cooldown_seconds: 30
+    enabled: true
+    notes: "Requires custom-trained model."
+
+  - class: smoke
+    label: "Smoke"
+    source: custom
+    tier: high
+    confidence: 0.55
+    consecutive_seconds: 3
+    cooldown_seconds: 60
+    enabled: true
+    notes: "Requires custom-trained model."
+
+  - class: helmet
+    label: "Helmet / Face Covering"
+    source: custom
+    tier: medium
+    confidence: 0.55
+    consecutive_seconds: 2
+    cooldown_seconds: 90
+    enabled: false
+    notes: "Context-dependent. Requires custom model."
+
+  - class: flag
+    label: "Flag / Banner / Placard"
+    source: custom
+    tier: low
+    confidence: 0.50
+    consecutive_seconds: 3
+    cooldown_seconds: 120
+    enabled: false
+    notes: "Crowd control context. Requires custom model."
+
+  - class: thrown_object
+    label: "Thrown Object (Stones etc.)"
+    source: custom
+    tier: high
+    confidence: 0.60
+    consecutive_seconds: 1
+    cooldown_seconds: 30
+    enabled: true
+    notes: "Requires custom model trained on projectile motion."
+
+  - class: broken_glass
+    label: "Broken Glass"
+    source: custom
+    tier: high
+    confidence: 0.60
+    consecutive_seconds: 2
+    cooldown_seconds: 60
+    enabled: true
+    notes: "Requires custom model."
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Behavior Rules Configuration
+# ─────────────────────────────────────────────────────────────────────────────
+
+rules:
+  crowd_density:
+    enabled: true
+    tier: medium
+    person_threshold: 20          # persons per zone to trigger
+    cooldown_seconds: 120
+
+  stampede_detection:
+    enabled: true
+    tier: high
+    velocity_threshold: 80        # pixels/second average track velocity
+    min_tracks: 10                # minimum tracks moving fast simultaneously
+    cooldown_seconds: 60
+
+  loitering:
+    enabled: true
+    tier: low
+    duration_seconds: 120         # track must stay in zone for this long
+    cooldown_seconds: 300
+
+  restricted_zone:
+    enabled: true
+    tier: high
+    intrusion_seconds: 3          # person in restricted zone for this long
+    cooldown_seconds: 60
+
+  unattended_bag:
+    enabled: true
+    tier: high
+    no_person_radius_px: 150      # pixels radius to check for nearby person
+    static_seconds: 30            # bag must be static for this long
+    cooldown_seconds: 120
+
+  fighting_detection:
+    enabled: false
+    tier: critical
+    notes: "Placeholder — requires pose/action model (future phase)."
+
+  falling_detection:
+    enabled: false
+    tier: high
+    notes: "Placeholder — requires pose/action model (future phase)."

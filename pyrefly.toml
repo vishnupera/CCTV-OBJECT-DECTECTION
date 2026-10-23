@@ -1,0 +1,4 @@
+# Pyrefly configuration for CCTV AI project
+search-path = ["backend"]
+site-package-path = ["backend/venv/Lib/site-packages"]
+python-interpreter-path = "backend/venv/Scripts/python.exe"

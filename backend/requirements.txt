@@ -1,0 +1,46 @@
+# Core
+fastapi==0.115.5
+uvicorn[standard]==0.32.1
+python-multipart==0.0.12
+httpx==0.28.0
+
+# Database
+sqlalchemy==2.0.36
+alembic==1.14.0
+psycopg2-binary==2.9.10
+asyncpg==0.30.0
+
+# Auth & Security
+python-jose[cryptography]==3.3.0
+passlib[argon2]==1.7.4
+bcrypt==4.2.1
+pyotp==2.9.0
+slowapi==0.1.9
+
+# Pydantic & settings
+pydantic==2.10.3
+pydantic-settings==2.6.1
+email-validator>=2.0.0
+greenlet>=3.0.0
+python-dotenv==1.0.1
+
+# Vision
+opencv-python-headless==4.10.0.84
+ultralytics==8.3.42
+numpy==1.26.4
+Pillow==11.0.0
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Tracking
+filterpy==1.4.5
+scipy==1.14.1
+
+# Utilities
+aiofiles==24.1.0
+websockets==14.1
+PyYAML==6.0.2
+structlog==24.4.0
+psutil==6.1.0
+GPUtil==1.4.0
+schedule==1.2.2
