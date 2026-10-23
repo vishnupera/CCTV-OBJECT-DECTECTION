@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # SafeWatchAI — AI CCTV Crowd Safety & Incident Detection System
 
 > **MVP Complete** | High-performance AI-assisted CCTV video analytics system combining real-time YOLOv8 object detection, multi-object ByteTrack tracking, spatial zone logic, automated incident detection, evidence clipping, and an operations console with a modern public showcase website.
@@ -193,3 +194,6 @@ The system supports multiple input modes via the `VIDEO_SOURCE` setting:
   - Automated evidence file retention cleanup service (`app/services/retention.py`).
   - Sample replay script (`scripts/replay_sample.py`).
   - Structured logging and unified configuration validation.
+=======
+# CCTV-OBJECT-DECTECTION
+>>>>>>> f1f4b578a7a7997b59fbe96fb87556b04fdc81b7
